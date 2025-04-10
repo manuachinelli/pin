@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Obtener PIN</title>
+  <style>
+    body {
+      background-color: #1F1F26;
+      font-family: 'Inter', sans-serif;
+      color: #FFFFFF;
+      padding: 2rem;
+      max-width: 500px;
+      margin: auto;
+    }
+    .logo {
+      display: flex;
+      justify-content: center;
+      margin-bottom: 2rem;
+    }
+    .logo img {
+      height: 60px;
+    }
+    h1 {
+      color: #FFFFFF;
+      text-align: center;
+    }
+    label {
+      margin-bottom: 0.5rem;
+      color: #A0A0B2;
+    }
+    input {
+      background-color: #2C2C35;
+      border: none;
+      padding: 0.75rem;
+      color: #FFFFFF;
+      border-radius: 8px;
+      margin-bottom: 1rem;
+    }
+    button {
+      background-color: #4E4EFF;
+      border: none;
+      color: white;
+      padding: 0.75rem;
+      border-radius: 8px;
+      font-weight: bold;
+      cursor: pointer;
+      transition: background-color 0.3s;
+    }
+    button:hover {
+      background-color: #3A3AD6;
+    }
+    .result {
+      font-weight: bold;
+      margin-top: 2rem;
+      background-color: #2C2C35;
+      padding: 1rem;
+      border-radius: 8px;
+      text-align: center;
+      color: #FFFFFF;
+    }
+  </style>
+</head>
+<body>
+  <div class="logo">
+    <img src="logo.png" alt="Brandtrack logo" />
+  </div>
+  <h1>Obtener PIN</h1>
+  <label for="playerId">Player ID</label>
+  <input type="text" id="playerId" required />
+
+  <label for="accountId">Account ID</label>
+  <input type="text" id="accountId" required />
+
+  <button onclick="obtenerPin()">Generar PIN</button>
+
+  <div class="result" id="resultado"></div>
+
+  <script>
+    async function obtenerPin() {
+      const playerId = document.getElementById('playerId').value;
+      const accountId = document.getElementById('accountId').value;
+      const resultado = document.getElementById('resultado');
+      resultado.textContent = 'Generando PIN...';
+
+      try {
+        const uuidRes = await fetch(`https://api.brandtrack.fm/zapier/accounts/${accountId}/players/${playerId}`, {
+          headers: {
+            'X-Brandtrack-Zapier': 'U56nX8uE7ZCcNaP6ByMXz8TuZXdga35t'
+          }
+        });
+
+        if (!uuidRes.ok) throw new Error('Error obteniendo UUID');
+        const data = await uuidRes.json();
+        const uuid = data.data.uuid;
+        const name = data.data.name;
+
+        const pinRes = await fetch(`https://api.brandtrack.fm/zapier/players/${uuid}/refresh`, {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            'X-Brandtrack-Zapier': 'U56nX8uE7ZCcNaP6ByMXz8TuZXdga35t'
+          }
+        });
+
+        if (!pinRes.ok) throw new Error('Error obteniendo PIN');
+        const pinData = await pinRes.json();
+        const pin = pinData.data.code;
+
+        resultado.innerHTML = `<div>${name}</div><div style="margin-top: 0.5rem; font-size: 1.2rem;">Tu PIN es: <strong>${pin}</strong></div>`;
+      } catch (error) {
+        resultado.textContent = `Hubo un error: ${error.message}`;
+      }
+    }
+  </script>
+</body>
+</html>
