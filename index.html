@@ -5,6 +5,9 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Obtener PIN</title>
   <style>
+    * {
+      box-sizing: border-box;
+    }
     body {
       background-color: #1F1F26;
       font-family: 'Inter', sans-serif;
@@ -24,6 +27,7 @@
     h1 {
       color: #FFFFFF;
       text-align: center;
+      font-size: 1.8rem;
     }
     form {
       display: flex;
@@ -35,6 +39,7 @@
       margin-bottom: 0.5rem;
       color: #A0A0B2;
       align-self: flex-start;
+      font-size: 0.95rem;
     }
     input {
       background-color: #2C2C35;
@@ -43,6 +48,7 @@
       color: #FFFFFF;
       border-radius: 8px;
       width: 100%;
+      font-size: 1rem;
     }
     button {
       background-color: #4E4EFF;
@@ -53,7 +59,10 @@
       font-weight: bold;
       cursor: pointer;
       margin-top: 1.5rem;
+      font-size: 1rem;
       transition: background-color 0.3s;
+      width: 100%;
+      max-width: 300px;
     }
     button:hover {
       background-color: #3A3AD6;
@@ -62,10 +71,27 @@
       font-weight: bold;
       margin-top: 2rem;
       background-color: #2C2C35;
-      padding: 1rem;
-      border-radius: 8px;
+      padding: 1.25rem;
+      border-radius: 12px;
       text-align: center;
       color: #FFFFFF;
+      font-size: 1.2rem;
+    }
+    @media (max-width: 600px) {
+      body {
+        padding: 1rem;
+        max-width: 100%;
+      }
+      h1 {
+        font-size: 1.4rem;
+      }
+      .logo img {
+        height: 48px;
+      }
+      input, button {
+        font-size: 1rem;
+        padding: 0.75rem;
+      }
     }
   </style>
 </head>
